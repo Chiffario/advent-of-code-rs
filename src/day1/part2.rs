@@ -3,7 +3,9 @@ use std::hash::Hash;
 
 #[aoc(day1, part2)]
 pub fn solution(input: &str) -> u32 {
-    let (left, right): (Vec<u32>, Vec<u32>) = input
+    let mut left = Vec::with_capacity(1000);
+    let mut right = Vec::with_capacity(1000);
+    input
         .lines()
         .map(|line| unsafe {
             (
@@ -11,13 +13,15 @@ pub fn solution(input: &str) -> u32 {
                 u32::from_str_radix(&line[8..13], 10).unwrap_unchecked(),
             )
         })
-        .unzip();
+        .for_each(|(lhs, rhs)| {
+            left.push(lhs);
+            right.push(rhs);
+        });
     let right_freq = right.iter().my_counts();
 
-    let sum = left.iter().fold(0, |acc, item| {
+    left.iter().fold(0, |acc, item| {
         acc + *item * *right_freq.get(item).unwrap_or(&0) as u32
-    });
-    sum
+    })
 }
 
 trait CustomIter: Iterator {

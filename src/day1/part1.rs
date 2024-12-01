@@ -1,5 +1,5 @@
 #[aoc(day1, part1)]
-pub fn solution(input: &str) -> u32 {
+pub fn run(input: &str) -> u32 {
     let mut left = Vec::with_capacity(1000);
     let mut right = Vec::with_capacity(1000);
     input

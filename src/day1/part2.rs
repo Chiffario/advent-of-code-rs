@@ -3,14 +3,12 @@ use std::hash::Hash;
 
 #[aoc(day1, part2)]
 pub fn solution(input: &str) -> u32 {
-    let right_freq: HashMap<&u32, usize> = HashMap::with_capacity(1000);
     let (left, right): (Vec<u32>, Vec<u32>) = input
         .lines()
-        .map(|x| unsafe { x.split_once("   ").unwrap_unchecked() })
         .map(|line| unsafe {
             (
-                u32::from_str_radix(line.0, 10).unwrap_unchecked(),
-                u32::from_str_radix(line.1, 10).unwrap_unchecked(),
+                u32::from_str_radix(&line[0..5], 10).unwrap_unchecked(),
+                u32::from_str_radix(&line[8..13], 10).unwrap_unchecked(),
             )
         })
         .unzip();
@@ -29,7 +27,7 @@ trait CustomIter: Iterator {
         Self: Sized,
         Self::Item: Eq + Hash,
     {
-        let mut counts = HashMap::new();
+        let mut counts = HashMap::with_capacity(1000);
         self.for_each(|item| *counts.entry(item).or_default() += 1);
         counts
     }

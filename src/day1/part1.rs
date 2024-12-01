@@ -2,11 +2,11 @@ use itertools::Itertools;
 
 #[aoc(day1, part1)]
 pub fn solution(input: &str) -> u32 {
-    let (mut left, mut right): (Vec<i32>, Vec<i32>) = input
+    let (mut left, mut right): (Vec<u32>, Vec<u32>) = input
         .lines()
         .into_iter()
         .flat_map(|x| x.split_once("   "))
-        .map(|(x, y)| (x.parse::<i32>().unwrap(), y.parse::<i32>().unwrap()))
+        .map(|(x, y)| (x.parse::<u32>().unwrap(), y.parse::<u32>().unwrap()))
         .unzip();
     left.sort_unstable();
     right.sort_unstable();
@@ -15,7 +15,6 @@ pub fn solution(input: &str) -> u32 {
         .into_iter()
         .interleave(right.into_iter())
         .tuples::<(_, _)>()
-        .map(|(lhs, rhs)| lhs.abs_diff(rhs))
-        .sum::<u32>();
+        .fold(0, |acc, (lhs, rhs)| acc + lhs.abs_diff(rhs));
     common
 }

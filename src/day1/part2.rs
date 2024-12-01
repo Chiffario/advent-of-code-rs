@@ -3,25 +3,27 @@ use std::hash::Hash;
 
 #[aoc(day1, part2)]
 pub fn solution(input: &str) -> u32 {
-    let (mut left, mut right): (Vec<u32>, Vec<u32>) = input
+    let right_freq: HashMap<&u32, usize> = HashMap::with_capacity(1000);
+    let (left, right): (Vec<u32>, Vec<u32>) = input
         .lines()
-        .into_iter()
-        .flat_map(|x| x.split_once("   "))
-        .map(|(x, y)| (x.parse::<u32>().unwrap(), y.parse::<u32>().unwrap()))
+        .map(|x| unsafe { x.split_once("   ").unwrap_unchecked() })
+        .map(|line| unsafe {
+            (
+                u32::from_str_radix(line.0, 10).unwrap_unchecked(),
+                u32::from_str_radix(line.1, 10).unwrap_unchecked(),
+            )
+        })
         .unzip();
-    left.sort_unstable();
-    right.sort_unstable();
-
-    let left_freq = left.iter().my_counts();
     let right_freq = right.iter().my_counts();
 
-    let sum = left_freq.iter().fold(0, |acc, (item, count)| {
-        acc + *item * *count as u32 * *right_freq.get(item).unwrap_or(&1) as u32
+    let sum = left.iter().fold(0, |acc, item| {
+        acc + *item * *right_freq.get(item).unwrap_or(&0) as u32
     });
     sum
 }
 
 trait CustomIter: Iterator {
+    #[inline(always)]
     fn my_counts(self) -> HashMap<Self::Item, usize>
     where
         Self: Sized,

@@ -1,4 +1,4 @@
-// #[aoc(day1, part2)]
+#[aoc(day1, part2)]
 pub fn run(input: &str) -> usize {
     let mut left = Vec::with_capacity(1000);
     let mut right = Vec::with_capacity(1000);

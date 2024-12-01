@@ -1,13 +1,15 @@
+use std::iter::zip;
+
 #[aoc(day1, part1)]
-pub fn run(input: &str) -> u32 {
+pub fn run(input: &str) -> usize {
     let mut left = Vec::with_capacity(1000);
     let mut right = Vec::with_capacity(1000);
     input
-        .lines()
+        .split('\n')
         .map(|line| unsafe {
             (
-                u32::from_str_radix(&line[0..5], 10).unwrap_unchecked(),
-                u32::from_str_radix(&line[8..13], 10).unwrap_unchecked(),
+                parse_digit_unrolled(&line[0..5]),
+                parse_digit_unrolled(&line[8..13]),
             )
         })
         .for_each(|(lhs, rhs)| {
@@ -17,7 +19,12 @@ pub fn run(input: &str) -> u32 {
     left.sort_unstable();
     right.sort_unstable();
 
-    left.iter()
-        .zip(right)
-        .fold(0, |acc, (lhs, rhs)| acc + lhs.abs_diff(rhs))
+    zip(left, right).fold(0, |acc, (lhs, rhs)| acc + lhs.abs_diff(rhs))
+}
+unsafe fn parse_digit_unrolled(s: &str) -> usize {
+    (*s.as_bytes().get_unchecked(0) as usize - b'0' as usize) * 10000
+        + (*s.as_bytes().get_unchecked(1) as usize - b'0' as usize) * 1000
+        + (*s.as_bytes().get_unchecked(2) as usize - b'0' as usize) * 100
+        + (*s.as_bytes().get_unchecked(3) as usize - b'0' as usize) * 10
+        + (*s.as_bytes().get_unchecked(4) as usize - b'0' as usize) * 1
 }

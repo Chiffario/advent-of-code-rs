@@ -1,6 +1,6 @@
-use std::iter::zip;
+use std::{iter::zip};
 
-// #[aoc(day1, part1)]
+#[aoc(day1, part1)]
 pub fn run(input: &str) -> usize {
     let mut left = [0; 1000];
     let mut right = [0; 1000];
@@ -19,7 +19,7 @@ pub fn run(input: &str) -> usize {
 }
 #[inline(always)]
 unsafe fn parse_two_numbers_unrolled(s: &str) -> (usize, usize) {
-    (
+   (
         // Left number
         (*s.as_bytes().get_unchecked(0) as usize - b'0' as usize) * 10000
             + (*s.as_bytes().get_unchecked(1) as usize - b'0' as usize) * 1000
